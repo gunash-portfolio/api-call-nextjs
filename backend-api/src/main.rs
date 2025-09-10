@@ -1,7 +1,7 @@
 use std::error::Error;
 
 async fn fetch_rust_website()->Result<(), Box<dyn Error>>{
-    let body = reqwest::get("https://www.rust-lang.org").await?.text().await?;
+    let body = reqwest::get("https://httpbin.org/get").await?.text().await?;
     println!("body = {}", body);
     Ok(())
 }
