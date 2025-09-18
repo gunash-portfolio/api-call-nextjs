@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: cinama-postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: gunashfarzaliyev
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: Cinama
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d/
+volumes:
+  postgres_data:
