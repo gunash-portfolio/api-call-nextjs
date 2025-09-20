@@ -72,7 +72,7 @@ export default function MovieDetail() {
             
             <div className="w-full md:w-2/3">
               <div className="mb-6">
-                <h2 className="text-xl font-semibold mb-2">Details</h2>
+                <h2 className="text-xl font-semibold mb-2 text-black">Details</h2>
                 <p className="text-gray-700"><span className="font-medium">Released:</span> {new Date(movie.release_date).toLocaleDateString()}</p>
                 <p className="text-gray-700 mt-2"><span className="font-medium">IMDB Rating:</span> <span className="font-bold">{movie.imdb_rating}/10</span></p>
               </div>
