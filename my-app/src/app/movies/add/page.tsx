@@ -85,7 +85,7 @@ export default function AddMovie() {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-black"
                 placeholder="Enter movie title"
                 required
               />
@@ -101,7 +101,7 @@ export default function AddMovie() {
                 name="release_date"
                 value={formData.release_date}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-black"
                 required
               />
             </div>
@@ -119,7 +119,7 @@ export default function AddMovie() {
                 step="0.1"
                 value={formData.imdb_rating}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-black"
                 placeholder="Enter IMDB rating"
                 required
               />
