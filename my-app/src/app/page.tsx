@@ -34,8 +34,28 @@ export default function Home() {
   return (
     <main className="min-h-screen p-8 md:p-12 lg:p-24">
 <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-white-900 font-trajan">Christopher Nolan's Movie Collection</h1>      
+      
       {movies.length === 0 ? (
-        <p className="text-center text-gray-700">No movies found</p>
+        <div className="max-w-6xl mx-auto">
+          <p className="text-center text-gray-700 mb-6">No movies found</p>
+          
+          <div className="grid grid-cols-1 gap-6 max-w-sm mx-auto">
+            <div className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
+              <Link href="/movies/add" className="block">
+                <div className="h-48 bg-blue-100 flex items-center justify-center overflow-hidden">
+                  <div className="text-blue-600 flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h2 className="text-xl font-bold text-gray-900 hover:text-blue-600 text-center">Add New Movie</h2>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {movies.slice(0, 6).map((movie) => (
@@ -67,6 +87,21 @@ export default function Home() {
               </div>
             </div>
           ))}
+          
+          <div className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
+            <Link href="/movies/add" className="block">
+              <div className="h-48 bg-blue-100 flex items-center justify-center overflow-hidden">
+                <div className="text-blue-600 flex flex-col items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </div>
+              </div>
+              <div className="p-4">
+                <h2 className="text-xl font-bold text-gray-900 hover:text-blue-600 text-center">Add New Movie</h2>
+              </div>
+            </Link>
+          </div>
         </div>
       )}
     </main>
