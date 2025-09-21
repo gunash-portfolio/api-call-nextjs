@@ -47,8 +47,16 @@ export default function AddMovie() {
         throw new Error('Failed to add movie');
       }
 
-      // Redirect to home page after successful submission
-      router.push('/');
+      // Get the newly created movie data from the response
+      const data = await response.json();
+      
+      // Redirect to the new movie's detail page instead of the homepage
+      if (data.movie && data.movie.id) {
+        router.push(`/movies/${data.movie.id}`);
+      } else {
+        // Fallback to homepage if we don't get the movie ID for some reason
+        router.push('/');
+      }
       router.refresh();
     } catch (err) {
       console.error('Error adding movie:', err);
@@ -129,8 +137,10 @@ export default function AddMovie() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`px-6 py-2 bg-blue-600 text-white rounded-md ${
-                  isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-blue-700'
+                className={`px-6 py-2 bg-blue-600 text-white rounded-md transition-all duration-200 ${
+                  isSubmitting 
+                    ? 'opacity-70 cursor-not-allowed' 
+                    : 'hover:bg-blue-700 active:scale-95 active:bg-blue-800 active:shadow-inner'
                 }`}
               >
                 {isSubmitting ? 'Saving...' : 'Add Movie'}
