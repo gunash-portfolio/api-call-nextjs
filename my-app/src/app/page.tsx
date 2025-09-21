@@ -142,11 +142,11 @@ export default function Home() {
                 <button 
                   onClick={goToPreviousPage}
                   disabled={currentPage === 0}
-                  className={`px-4 py-2 text-sm font-medium rounded-l-md ${
-                    currentPage === 0 
+                  className={`px-4 py-2 text-sm font-medium rounded-l-md transition-all duration-200 
+                    ${currentPage === 0 
                       ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  } border border-gray-300`}
+                      : 'bg-white text-gray-700 hover:bg-gray-50 hover:shadow-inner active:bg-gray-200 active:scale-95 active:shadow-inner'
+                    } border border-gray-300`}
                 >
                   Previous
                 </button>
@@ -155,11 +155,11 @@ export default function Home() {
                   <button
                     key={index}
                     onClick={() => goToPage(index)}
-                    className={`px-4 py-2 text-sm font-medium border-t border-b border-gray-300 ${
-                      currentPage === index
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-700 hover:bg-gray-50'
-                    }`}
+                    className={`px-4 py-2 text-sm font-medium border-t border-b border-gray-300 transition-all duration-200
+                      ${currentPage === index
+                        ? 'bg-black-600 text-white shadow-inner'
+                        : 'bg-white text-gray-700 hover:bg-gray-50 hover:shadow-inner active:bg-gray-200 active:scale-95 active:shadow-inner'
+                      }`}
                   >
                     {index + 1}
                   </button>
@@ -168,11 +168,11 @@ export default function Home() {
                 <button
                   onClick={goToNextPage}
                   disabled={currentPage === totalPages - 1}
-                  className={`px-4 py-2 text-sm font-medium rounded-r-md ${
-                    currentPage === totalPages - 1
+                  className={`px-4 py-2 text-sm font-medium rounded-r-md transition-all duration-200
+                    ${currentPage === totalPages - 1
                       ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  } border border-gray-300`}
+                      : 'bg-white text-gray-700 hover:bg-gray-50 hover:shadow-inner active:bg-gray-200 active:scale-95 active:shadow-inner'
+                    } border border-gray-300`}
                 >
                   Next
                 </button>
