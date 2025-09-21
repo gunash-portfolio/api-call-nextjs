@@ -58,7 +58,7 @@ export default function Home() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {movies.slice(0, 6).map((movie) => (
+          {movies.map((movie) => (
             <div key={movie.id} className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
               <div className="h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
                 {movie.id === 1 ? (
