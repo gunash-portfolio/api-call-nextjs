@@ -3,16 +3,35 @@
 import { useEffect, useState } from 'react';
 import { Movie } from '@/types/movie';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 export default function MovieDetail() {
   const params = useParams();
   const { id } = params;
+  const router = useRouter();
   
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const handleDelete = async() =>{
+    if(!window.confirm("Delete movie?")){
+      return;
+    }
+    try{
+      const response=await fetch(`/api/movies/${id}`,{
+        method:'DELETE',
+      });
+      if (response.ok){
+        router.push('/');
+      }else{
+        setError('Failed to delete movie');
+      }
+    } catch(error){
+      console.error('Error deleting movie',error);
+      setError('While deleting movie some error occurred');
+    }
+  };
   useEffect(() => {
     const fetchMovie = async () => {
       try {
@@ -78,8 +97,18 @@ export default function MovieDetail() {
               </div>
             </div>
           </div>
+          
+          <div className="mt-8 flex justify-end">
+            <button 
+              onClick={handleDelete} 
+              className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-200 active:scale-95 active:bg-red-800"
+            >
+              Delete Movie
+            </button>
+          </div>
         </div>
       </div>
+      
     </main>
   );
 }
