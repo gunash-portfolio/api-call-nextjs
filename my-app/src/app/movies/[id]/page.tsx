@@ -98,13 +98,20 @@ export default function MovieDetail() {
             </div>
           </div>
           
-          <div className="mt-8 flex justify-end">
+          <div className="mt-8 flex justify-end space-x-4">
             <button 
               onClick={handleDelete} 
               className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-200 active:scale-95 active:bg-red-800"
             >
               Delete Movie
             </button>
+            <Link href={`/movies/${id}/edit`}>
+              <button 
+                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200 active:scale-95 active:bg-blue-800"
+              >
+                Edit Movie
+              </button>
+            </Link>
           </div>
         </div>
       </div>
