@@ -1,68 +1,57 @@
-import { NextRequest, NextResponse } from "next/server";
-import { query } from "@/lib/db";
+import { NextRequest, NextResponse } from 'next/server';
+import { MovieService } from '@/app/services/movieService';
+
+const movieService = new MovieService();
 
 interface Params {
-  params: {
-    id: string;
-  };
+  id: string;
 }
 
-export async function GET(_request: NextRequest, { params }: Params) {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
+// Handler for GET /api/movies/[id]
+export async function GET(req: NextRequest, context: { params: Params }) {
   try {
-    const result = await query('SELECT * FROM movies WHERE id = $1', [id]);
-    if (result.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Movie not found' },
-        { status: 404 }
-      );
+    const movieId = Number(context.params.id);
+    if (isNaN(movieId)) {
+      return NextResponse.json({ error: 'Movie ID must be a number.' }, { status: 400 });
     }
-
-    return NextResponse.json({ movie: result.rows[0] });
+    const movie = await movieService.getMovieById(movieId);
+    return NextResponse.json(movie, { status: 200 });
   } catch (error) {
-    console.error('Error fetching movie details', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch movie details' },
-      { status: 500 }
-    );
-  }
-}
-export async function DELETE(_request:NextRequest, { params }:Params) {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
-  try{
-    const result = await query('DELETE FROM movies WHERE id=$1',[id]);
-    if(result.rowCount ===0){
-      return NextResponse.json({error:'Movie not found'},{status:404}); 
-  }
-  return NextResponse.json({message:'Movie deleted successfully', movie:result.rows[0]});
-  }catch(error){
-    console.error('Error deleting movie',error);
-    return NextResponse.json({error:'Failed to delete movie'},{status:500});
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error.';
+    const statusCode = errorMessage.includes('not found') ? 404 : 500;
+    return NextResponse.json({ error: errorMessage }, { status: statusCode });
   }
 }
 
-export async function PUT(request: NextRequest, { params }: Params) {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
-  try {
-    const data = await request.json();
-    const { title, release_date, imdb_rating } = data;
-    
-    const result = await query(
-      'UPDATE movies SET title = $1, release_date = $2, imdb_rating = $3 WHERE id = $4 RETURNING *',
-      [title, release_date, imdb_rating, id]
-    );
-    if(result.rowCount === 0){
-      return NextResponse.json({error:'Movie not found'},{status:404});
+// Handler for PUT /api/movies/[id]
+export async function PUT(req: NextRequest, context: { params: Params }) {
+    try {
+        const movieId = Number(context.params.id);
+        if (isNaN(movieId)) {
+            return NextResponse.json({ error: 'Movie ID must be a number.' }, { status: 400 });
+        }
+        const body = await req.json();
+        const updatedMovie = await movieService.updateMovie(movieId, body);
+        return NextResponse.json(updatedMovie, { status: 200 });
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Internal server error.';
+        const statusCode = errorMessage.includes('not found') ? 404 : 500;
+        return NextResponse.json({ error: errorMessage }, { status: statusCode });
     }
-    return NextResponse.json({message:'Movie updated successfully', movie:result.rows[0]});
-  } catch (error) {
-    console.error('Error updating movie', error);
-    return NextResponse.json(
-      { error: 'Failed to update movie' },
-      { status: 500 }
-    );
-  }
+}
+
+// Handler for DELETE /api/movies/[id]
+export async function DELETE(req: NextRequest, context: { params: Params }) {
+    try {
+        const movieId = Number(context.params.id);
+        if (isNaN(movieId)) {
+            return NextResponse.json({ error: 'Movie ID must be a number.' }, { status: 400 });
+        }
+        const deletedMovie = await movieService.deleteMovie(movieId);
+        return NextResponse.json(deletedMovie, { status: 200 });
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Internal server error.';
+        const statusCode = errorMessage.includes('not found') ? 404 : 500;
+        return NextResponse.json({ error: errorMessage }, { status: statusCode });
+    }
 }

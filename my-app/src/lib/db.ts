@@ -1,25 +1,34 @@
-import { Pool } from 'pg';
+import { Pool, PoolConfig } from 'pg';
 
-const pool = new Pool({
-  user: 'gunashfarzaliyev',
-  host: 'localhost',
-  database: 'Cinama',
-  password: '',
-  port: 5432,
-});
+// Declare the pool variable in the module scope.
+let pool: Pool | undefined;
 
-export async function query(text: string, params?: any[]){
-    try{
-    const start = Date.now();
-    const res = await pool.query(text, params);
-    const duration = Date.now()-start;
-    console.log('Executed query', {text, duration, rows: res.rowCount});
-    return res;
-} catch (error){
-    console.error('Error executing query', error);
-    throw error;
-}
-}
+// This function will be our single point of access to the database pool.
+const getPool = () => {
+  // If the pool doesn't exist yet, create it.
+  if (!pool) {
+    console.log('Creating new PostgreSQL connection pool...');
 
+    // Start with the base configuration.
+    const config: PoolConfig = {
+      connectionString: process.env.DATABASE_URL,
+    };
 
-export default pool;
+    // --- THIS IS THE FIX ---
+    // Only add the SSL configuration if we are in a 'production' environment.
+    // When you run 'pnpm run dev', NODE_ENV is 'development', so this block is skipped.
+    if (process.env.NODE_ENV === 'production') {
+      config.ssl = {
+        rejectUnauthorized: false,
+      };
+    }
+    // --------------------
+
+    pool = new Pool(config);
+  }
+  // Return the existing or newly created pool.
+  return pool;
+};
+
+// Export the function as the default export.
+export default getPool;
