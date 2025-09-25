@@ -1,15 +1,39 @@
+
 services:
-  postgres:
-    image: postgres:15
-    container_name: cinama-postgres
+  #########################################
+  # 1. The Next.js Application Service    #
+  #########################################
+  app:
+    build: ./my-app
+    container_name: nextjs_app
     ports:
-      - 5432:5432
+      - "3000:3000"
+    volumes:
+      - ./my-app:/app
+    depends_on:
+      - cinama-postgres
+    env_file:
+      - ./my-app/.env.local
+
+  #########################################
+  # 2. The PostgreSQL Database Service    #
+  #########################################
+  cinama-postgres:
+    image: postgres:latest
+    container_name: cinama_postgres_db
+    restart: always
     environment:
       POSTGRES_USER: gunashfarzaliyev
-      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_PASSWORD: gunashfarzaliyev
       POSTGRES_DB: Cinama
+    ports:
+      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./sql:/docker-entrypoint-initdb.d/
+      # --- THIS IS THE ONLY LINE THAT HAS CHANGED ---
+      # The source path now correctly points to the init.sql file inside the sql folder.
+      - ./my-app/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # -----------------------------------------------
+      - cinama_postgres_data:/var/lib/postgresql/data
+
 volumes:
-  postgres_data:
+  cinama_postgres_data:
