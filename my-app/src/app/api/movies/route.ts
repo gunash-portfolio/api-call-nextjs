@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { query } from "@/lib/db";
+import prisma from "@/lib/prisma";
 
 export async function GET(){
   try{
-    const results = await query('SELECT * FROM movies ORDER BY id ASC');
-    return NextResponse.json({movies:results.rows});
+    const movies = await prisma.movies.findMany({
+      orderBy: { id: 'asc' }
+    });
+    return NextResponse.json({movies});
   } catch (error){
     console.error('Error fetching movies', error);
     return NextResponse.json({error: 'Failed to fetch movies'}, {status: 500});
@@ -23,15 +25,18 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Insert the new movie
-    const result = await query(
-      'INSERT INTO movies (title, release_date, imdb_rating) VALUES ($1, $2, $3) RETURNING *',
-      [title, release_date, imdb_rating]
-    );
+    // Insert the new movie using Prisma
+    const movie = await prisma.movies.create({
+      data: {
+        title,
+        release_date: new Date(release_date),
+        imdb_rating
+      }
+    });
     
     return NextResponse.json({ 
       message: 'Movie added successfully',
-      movie: result.rows[0]
+      movie
     }, { status: 201 });
   } catch (error) {
     console.error('Error adding movie', error);
