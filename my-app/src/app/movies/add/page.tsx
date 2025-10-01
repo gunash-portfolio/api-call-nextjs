@@ -18,7 +18,7 @@ export default function AddMovie() {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'imdb_rating' ? parseFloat(value) : value
+      [name]: name === 'imdb_rating' ? (value === '' ? 0 : parseFloat(value) || 0) : value
     }));
   };
 
