@@ -1,0 +1,54 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: cinema-postgres-prod
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: gunashfarzaliyev
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secure_password_here}
+      POSTGRES_DB: Cinama
+      POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_AUTH:-scram-sha-256}
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gunashfarzaliyev -d Cinama"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # Next.js Application
+  nextjs-app:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+    container_name: cinema-nextjs-prod
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://gunashfarzaliyev:${POSTGRES_PASSWORD:-secure_password_here}@postgres:5432/Cinama
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    # Start the application (migrations should be run separately)
+    command: ["node", "server.js"]
+
+volumes:
+  postgres_data_prod:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
+
