@@ -62,7 +62,7 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
 
 # Install only Prisma CLI for migrations (production dependencies)
-RUN pnpm install --prod --frozen-lockfile prisma @prisma/client
+RUN pnpm add --prod prisma @prisma/client
 
 # Copy standalone build
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./

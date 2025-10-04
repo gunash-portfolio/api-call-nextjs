@@ -13,7 +13,7 @@ services:
       POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_AUTH:-scram-sha-256}
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
-      - ./sql:/docker-entrypoint-initdb.d/
+      # SQL initialization removed - using Prisma migrations instead
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U gunashfarzaliyev -d Cinama"]
       interval: 10s
