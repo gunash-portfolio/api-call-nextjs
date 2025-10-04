@@ -10,6 +10,6 @@ services:
       POSTGRES_DB: Cinama
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./sql:/docker-entrypoint-initdb.d/
+      # SQL initialization removed - using Prisma migrations instead
 volumes:
   postgres_data:
