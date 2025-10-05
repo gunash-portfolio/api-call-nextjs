@@ -36,8 +36,8 @@ A modern movie management web application built with Next.js 15, TypeScript, Pri
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
-   cd api-call-rust-and-nextjs
+   git clone git@github.com:gunash-portfolio/api-call-nextjs.git
+   cd api-call-nextjs
    ```
 
 2. **Install dependencies**
@@ -55,7 +55,7 @@ A modern movie management web application built with Next.js 15, TypeScript, Pri
 4. **Set up environment variables**
    ```bash
    cd my-app
-   echo 'DATABASE_URL="postgresql://gunashfarzaliyev@localhost:5432/Cinama"' > .env
+   echo 'DATABASE_URL="your database url"
    ```
 
 5. **Run migrations**
@@ -97,7 +97,7 @@ For detailed Docker deployment instructions, see [`DEPLOYMENT_SUCCESS.md`](./DEP
 ## 📁 Project Structure
 
 ```
-api-call-rust-and-nextjs/
+api-call-nextjs/
 ├── my-app/                          # Next.js application
 │   ├── src/
 │   │   ├── app/                     # Next.js App Router
@@ -176,7 +176,7 @@ model movies {
 ### Running Prisma Studio
 ```bash
 cd my-app
-pnpm exec prisma studio
+DATABASE_URL="your_database_url" pnpm exec prisma studio
 ```
 
 ### Generate Prisma Client
@@ -186,7 +186,19 @@ pnpm exec prisma generate
 
 ### Create New Migration
 ```bash
-pnpm exec prisma migrate dev --name your_migration_name
+# For development database
+DATABASE_URL="your-database-url" pnpm exec prisma migrate dev --name your_migration_name
+
+# For production database
+DATABASE_URL="your-database-url" pnpm exec prisma migrate deploy
+```
+
+### Run Migrations in Docker
+```bash
+# Note: Migrations should be run from your local machine, NOT inside Docker container
+# For production database:
+cd my-app
+DATABASE_URL="your-database-url" pnpm exec prisma migrate deploy
 ```
 
 ## 🎨 Code Structure Highlights
@@ -251,9 +263,23 @@ cd my-app
 pnpm exec prisma generate
 ```
 
+### Cannot run migrations in Docker
+```bash
+# ❌ This won't work:
+docker exec cinema-nextjs-prod npx prisma migrate deploy
+# Error: Cannot find module '@prisma/engines'
+
+# ✅ Run migrations from your local machine instead:
+cd my-app
+DATABASE_URL="your-database-url" \
+  pnpm exec prisma migrate deploy
+```
+
+
+
+
 ## 📚 Documentation
 
-- [Docker Deployment Guide](./DEPLOYMENT_SUCCESS.md)
 - [Detailed Docker Documentation](./my-app/DOCKER_DEPLOYMENT.md)
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Prisma Documentation](https://www.prisma.io/docs)
@@ -266,22 +292,4 @@ pnpm exec prisma generate
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
 
-This project is open source and available under the MIT License.
-
-## 👤 Author
-
-**Gunash Farzaliyev**
-
-## 🙏 Acknowledgments
-
-- Next.js team for the amazing framework
-- Prisma team for the excellent ORM
-- PostgreSQL community
-
----
-
-**Status**: ✅ Production Ready
-
-Built with ❤️ using Next.js, TypeScript, and PostgreSQL
