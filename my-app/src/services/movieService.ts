@@ -1,14 +1,11 @@
 import prisma from "@/lib/prisma";
 
 /**
- * Movie Service
- * Handles all business logic for movie operations
+ * ALL BACKEND BASIC FUNCTIONS ARE THERE
  */
 
 export class MovieService {
-  /**
-   * Get a single movie by ID
-   */
+
   static async getMovieById(id: number) {
     try {
       const movie = await prisma.movies.findUnique({
@@ -26,9 +23,7 @@ export class MovieService {
     }
   }
 
-  /**
-   * Get all movies
-   */
+  
   static async getAllMovies() {
     try {
       const movies = await prisma.movies.findMany({
@@ -44,9 +39,7 @@ export class MovieService {
     }
   }
 
-  /**
-   * Create a new movie
-   */
+  
   static async createMovie(data: { title: string; release_date: Date; imdb_rating: number }) {
     try {
       const movie = await prisma.movies.create({
@@ -70,9 +63,7 @@ export class MovieService {
     }
   }
 
-  /**
-   * Update an existing movie
-   */
+  
   static async updateMovie(id: number, data: { title?: string; release_date?: Date; imdb_rating?: number }) {
     try {
       // Build update data object dynamically
@@ -108,12 +99,10 @@ export class MovieService {
     }
   }
 
-  /**
-   * Delete a movie
-   */
+  
   static async deleteMovie(id: number) {
     try {
-      // First check if movie exists
+  
       const movie = await prisma.movies.findUnique({
         where: { id }
       });
@@ -122,7 +111,6 @@ export class MovieService {
         return { success: false, error: 'Movie not found', status: 404 };
       }
 
-      // Delete the movie
       await prisma.movies.delete({
         where: { id }
       });
