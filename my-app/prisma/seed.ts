@@ -14,6 +14,7 @@ export async function createMovie(title: string, releaseDate: Date, imdbRating: 
 }
 
 
+
 export async function createMovies(moviesData: { title: string, releaseDate: Date, imdbRating: number }[]) {
   return prisma.movies.createMany({
     data: moviesData.map(movie => ({

@@ -19,3 +19,14 @@ model movies{
   release_date DateTime @unique
   imdb_rating Float @unique
 }
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  name String?
+  password String
+  role String @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdById Int?
+  //createdBy User? @relation("CreatedBy", fields: [createdById], references: [id])
+}
