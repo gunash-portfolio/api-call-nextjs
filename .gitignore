@@ -10,12 +10,8 @@ coverage/
 build/
 dist/
 
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Environment variables (all .env files)
+.env*
 
 # macOS
 .DS_Store
@@ -46,3 +42,4 @@ lerna-debug.log*
 # Misc
 *.pem
 
+.env.production

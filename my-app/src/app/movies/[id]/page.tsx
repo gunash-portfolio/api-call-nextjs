@@ -55,19 +55,19 @@ export default function MovieDetail() {
     }
   }, [id]);
 
-  if (loading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
-  if (error) return <div className="flex justify-center items-center min-h-screen text-red-500">Error: {error}</div>;
-  if (!movie) return <div className="flex justify-center items-center min-h-screen">Movie not found</div>;
+  if (loading) return <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">Loading...</div>;
+  if (error) return <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-gray-300">Error: {error}</div>;
+  if (!movie) return <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">Movie not found</div>;
 
   return (
-    <main className="min-h-screen p-8 md:p-12 lg:p-24">
+    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 p-8 md:p-12 lg:p-24">
       <div className="max-w-4xl mx-auto">
-        <Link href="/" className="text-blue-500 hover:text-blue-700 mb-6 inline-block">
+        <Link href="/" className="text-white hover:text-gray-300 mb-6 inline-block">
           &larr; Back to all movies
         </Link>
         
-        <div className="bg-white rounded-lg overflow-hidden shadow-lg p-6">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{movie.title}</h1>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg overflow-hidden shadow-lg p-6">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">{movie.title}</h1>
           
           <div className="flex flex-col md:flex-row gap-8">
             <div className="w-full md:w-1/3">
@@ -91,9 +91,9 @@ export default function MovieDetail() {
             
             <div className="w-full md:w-2/3">
               <div className="mb-6">
-                <h2 className="text-xl font-semibold mb-2 text-black">Details</h2>
-                <p className="text-gray-700"><span className="font-medium">Released:</span> {new Date(movie.release_date).toLocaleDateString()}</p>
-                <p className="text-gray-700 mt-2"><span className="font-medium">IMDB Rating:</span> <span className="font-bold">{movie.imdb_rating}/10</span></p>
+                <h2 className="text-xl font-semibold mb-2 text-white">Details</h2>
+                <p className="text-gray-300"><span className="font-medium">Released:</span> {new Date(movie.release_date).toLocaleDateString()}</p>
+                <p className="text-gray-300 mt-2"><span className="font-medium">IMDB Rating:</span> <span className="font-bold">{movie.imdb_rating}/10</span></p>
               </div>
             </div>
           </div>
@@ -101,13 +101,13 @@ export default function MovieDetail() {
           <div className="mt-8 flex justify-end space-x-4">
             <button 
               onClick={handleDelete} 
-              className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-200 active:scale-95 active:bg-red-800"
+              className="px-6 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-all duration-200 active:scale-95"
             >
               Delete Movie
             </button>
             <Link href={`/movies/${id}/edit`}>
               <button 
-                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200 active:scale-95 active:bg-blue-800"
+                className="px-6 py-2 bg-white text-black rounded-md hover:bg-gray-200 transition-all duration-200 active:scale-95"
               >
                 Edit Movie
               </button>
