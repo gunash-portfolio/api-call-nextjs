@@ -8,9 +8,9 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_USER: gunashfarzaliyev
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secure_password_here}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: Cinama
-      POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_AUTH:-scram-sha-256}
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
       # SQL initialization removed - using Prisma migrations instead
@@ -33,8 +33,8 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgresql://gunashfarzaliyev:${POSTGRES_PASSWORD:-secure_password_here}@postgres:5432/Cinama
-      AUTH_SECRET: ${AUTH_SECRET:-change_this_secret_in_production}
+      DATABASE_URL: ${DATABASE_URL}
+      AUTH_SECRET: ${AUTH_SECRET}
       HOSTNAME: 0.0.0.0
       PORT: 3000
     depends_on:
