@@ -5,6 +5,11 @@ import prisma from "@/lib/prisma";
 
 export const {handlers,signIn,signOut,auth} = NextAuth({
     secret: process.env.AUTH_SECRET,
+    trustHost: true,  // Trust all hosts in development/Docker
+    session: {
+        strategy: "jwt",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+    },
     providers:[
         Credentials(
             {
@@ -47,9 +52,6 @@ export const {handlers,signIn,signOut,auth} = NextAuth({
         signIn:"/auth/login",
         // @ts-ignore - Custom property for reference
         signUp:"/auth/register",
-    },
-    session:{
-        strategy:"jwt"
     },
     callbacks:{
         async jwt({token, user}){
