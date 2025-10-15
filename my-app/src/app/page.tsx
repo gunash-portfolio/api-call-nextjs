@@ -50,6 +50,12 @@ export default function Home() {
               
               {status === 'authenticated' && session?.user && (
                 <>
+                  <Link
+                    href="/dashboard"
+                    className="px-4 py-2 text-gray-300 hover:text-white text-sm font-medium transition-colors duration-200"
+                  >
+                    Dashboard
+                  </Link>
                   <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700">
                     <div className="flex flex-col">
                       <span className="text-sm text-white font-medium">
