@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import useMovies from '@/hooks/useMovies';
+import useUserFilms from '@/hooks/useUserFilms';
 import MovieCard from '@/components/MovieCard';
 import AddMovieCard from '@/components/AddMovieCard';
 import Pagination from '@/pagination/Pagination';
@@ -11,7 +12,9 @@ import { Movie } from '@/types/movie';
 export default function Home() {
   const { data: session, status } = useSession();
   const { movies, loading, error } = useMovies();
+  const { isFavorite, addFavorite, removeFavorite, getFavoriteId } = useUserFilms();
   const [currentPage, setCurrentPage] = useState(0);
+  const [togglingMovieId, setTogglingMovieId] = useState<number | null>(null);
   const moviesPerPage = 6;
   
   // Calculate pagination values
@@ -25,6 +28,33 @@ export default function Home() {
   const goToNextPage = () => currentPage < totalPages - 1 && setCurrentPage(p => p + 1);
   const goToPreviousPage = () => currentPage > 0 && setCurrentPage(p => p - 1);
   const goToPage = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // Favorite toggle handler
+  const handleToggleFavorite = async (movieId: number) => {
+    if (status !== 'authenticated') {
+      alert('Please sign in to add favorites');
+      return;
+    }
+
+    setTogglingMovieId(movieId);
+    
+    if (isFavorite(movieId)) {
+      const userFilmId = getFavoriteId(movieId);
+      if (userFilmId) {
+        const result = await removeFavorite(userFilmId);
+        if (!result.success) {
+          alert(result.error || 'Failed to remove favorite');
+        }
+      }
+    } else {
+      const result = await addFavorite(movieId);
+      if (!result.success) {
+        alert(result.error || 'Failed to add favorite');
+      }
+    }
+    
+    setTogglingMovieId(null);
+  };
 
   if (loading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;
@@ -104,7 +134,12 @@ export default function Home() {
           <EmptyState />
         ) : (
           <>
-            <MovieGrid currentMovies={currentMovies} />
+            <MovieGrid 
+              currentMovies={currentMovies}
+              isFavorite={isFavorite}
+              onToggleFavorite={handleToggleFavorite}
+              togglingMovieId={togglingMovieId}
+            />
             {totalPages > 1 && (
               <Pagination
                 currentPage={currentPage}
@@ -150,12 +185,21 @@ const EmptyState = () => (
 
 type MovieGridProps = {
   currentMovies: Movie[];
+  isFavorite: (movieId: number) => boolean;
+  onToggleFavorite: (movieId: number) => void;
+  togglingMovieId: number | null;
 };
 
-const MovieGrid = ({ currentMovies }: MovieGridProps) => (
+const MovieGrid = ({ currentMovies, isFavorite, onToggleFavorite, togglingMovieId }: MovieGridProps) => (
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
     {currentMovies.map(movie => (
-      <MovieCard key={movie.id} movie={movie} />
+      <MovieCard 
+        key={movie.id} 
+        movie={movie}
+        isFavorite={isFavorite(movie.id)}
+        onToggleFavorite={onToggleFavorite}
+        isToggling={togglingMovieId === movie.id}
+      />
     ))}
     <AddMovieCard />
   </div>

@@ -1,9 +1,38 @@
 import Link from 'next/link';
 import { Movie } from '@/types/movie';
+import { useSession } from 'next-auth/react';
 
-export default function MovieCard({ movie }: { movie: Movie }) {
+interface MovieCardProps {
+  movie: Movie;
+  isFavorite?: boolean;
+  onToggleFavorite?: (movieId: number) => void;
+  isToggling?: boolean;
+}
+
+export default function MovieCard({ movie, isFavorite = false, onToggleFavorite, isToggling = false }: MovieCardProps) {
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
+
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
+    <div className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105 relative">
+      {/* Favorite Button - Only show when authenticated */}
+      {isAuthenticated && onToggleFavorite && (
+        <button
+          onClick={() => onToggleFavorite(movie.id)}
+          disabled={isToggling}
+          className="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-lg transition-all duration-200 flex items-center justify-center disabled:opacity-50"
+          title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+        >
+          {isToggling ? (
+            <span className="text-xl">⏳</span>
+          ) : (
+            <span className={`text-xl ${isFavorite ? 'text-red-500' : 'text-gray-400'}`}>
+              {isFavorite ? '❤️' : '🤍'}
+            </span>
+          )}
+        </button>
+      )}
+      
       <div className="h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
         {movie.id === 1 ? (
           <img 

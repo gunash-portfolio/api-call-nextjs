@@ -18,6 +18,7 @@ model movies{
   title String @unique
   release_date DateTime @unique
   imdb_rating Float @unique
+  userFilms UserFilms[]
 }
 model User {
   id Int @id @default(autoincrement())
@@ -28,5 +29,20 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   createdById Int?
+  userFilms UserFilms[]
   //createdBy User? @relation("CreatedBy", fields: [createdById], references: [id])
+}
+
+model UserFilms {
+  id Int @id @default(autoincrement())
+  userId Int
+  movieId Int
+  addedAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie movies @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, movieId])
+  @@index([userId])
+  @@index([movieId])
 }
